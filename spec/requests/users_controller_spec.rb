@@ -9,7 +9,7 @@ describe UsersController do
   end
 
   it 'handles /users/:id with GET' do
-    gt users(:admin)
+    gt @user
     expect(response).to be_successful
   end
 
@@ -21,23 +21,21 @@ describe UsersController do
   end
 
   it 'handles /users/:id with valid params and PUT' do
-    user = users(:admin)
-    ptch user, user: { name: 'new' }
-    expect(user.reload.name).to eq('new')
-    expect(response).to redirect_to(user_path(user))
+    ptch @user, user: { name: 'new' }
+    expect(@user.reload.name).to eq('new')
+    expect(response).to redirect_to(user_path(@user))
   end
 
   it 'handles /users/:id with invalid params and PUT' do
-    user = users(:admin)
-    ptch user, user: { password: '' }
-    expect(user.reload.name).not_to be_blank
+    ptch @user, user: { password: '' }
+    expect(@user.reload.name).not_to be_blank
     expect(response).to be_successful
     expect(response).to render_template(:show)
   end
 
   it 'handles /users/:id with DELETE' do
     expect {
-      del users(:admin)
+      del @user
       expect(response).to redirect_to(users_path)
     }.to change(User, :count).by(-1)
   end

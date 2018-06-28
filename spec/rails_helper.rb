@@ -30,15 +30,29 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.global_fixtures            = :all
 
+  config.include FactoryBot::Syntax::Methods
+
   config.render_views
   config.filter_rails_from_backtrace!
   config.infer_spec_type_from_file_location!
+
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
 
   def authorization_header
     { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(@user.name+':'+@user.password)}" } if @user
   end
 
   def login_as(username)
-    @user = users(username)
+    @user = create(:user, username)
   end
 end

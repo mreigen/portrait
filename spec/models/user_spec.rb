@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 describe User, 'authentication' do
+  let!(:admin) { create(:user, :admin) }
+
   it 'should authenticate a valid user' do
-    expect(User.authenticate('admin', 'password')).to eq users(:admin)
+    expect(User.authenticate('admin', 'password')).to eq admin
   end
 
   it 'should not authenticate valid user with wrong password' do
@@ -23,6 +25,8 @@ describe User, 'authentication' do
 end
 
 describe User, 'validations' do
+  let!(:admin) { create(:user, :admin) }
+
   it 'should have a name' do
     user = User.new
     user.valid?
@@ -42,7 +46,7 @@ describe User, 'validations' do
   end
 
   it 'should have a unique name' do
-    user = User.new name: users(:admin).name
+    user = User.new name: admin.name
     user.valid?
     expect(user.errors[:name]).not_to be_empty
   end
