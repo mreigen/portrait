@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-  include Authenticatable
+  attr_accessor :password # removed password column, use this as a temp attribute to be encrypted
+
   has_many :sites, dependent: :destroy
 
   scope :by_name, ->{ order(name: :asc) }
@@ -23,9 +24,6 @@ class User < ApplicationRecord
     end
   end
 
-  scope :by_name, ->{ order(name: :asc) }
 
-  def to_param() name end
 
-  validates :password, presence: true
 end
