@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
+  include Authenticatable
+
   before_action :user_required
+  before_action :get_user, only: [:show, :update, :destroy]
 
   # GET /users
   def index
@@ -9,12 +12,11 @@ class UsersController < ApplicationController
 
   # GET /users/:id
   def show
-    @user = User.find_by! name: params[:id]
   end
 
   # POST /user
   def create
-    @user = User.new params.require(:user).permit!
+    @user = User.new user_params
     @user.save!
     redirect_to users_url
   rescue ActiveRecord::RecordInvalid
@@ -24,8 +26,7 @@ class UsersController < ApplicationController
 
   # PUT /users/:id
   def update
-    @user = User.find_by! name: params[:id]
-    @user.update_attributes! params.require(:user).permit!
+    @user.update_attributes! user_params
     redirect_to @user
   rescue ActiveRecord::RecordInvalid
     render :show
@@ -33,9 +34,18 @@ class UsersController < ApplicationController
 
   # DELETE /users/:id
   def destroy
-    @user = User.find_by! name: params[:id]
     @user.destroy
     redirect_to users_url
+  end
+
+  private
+
+  def get_user
+    @user = User.find_by! name: params[:id]
+  end
+
+  def user_params
+    params.require(:user).permit!
   end
 
 end
