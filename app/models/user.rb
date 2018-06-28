@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   def to_param() name end
 
+  validate  :password_presence
   validates :name, uniqueness: true, format: /[a-z0-9]+/
 
   after_create :encrypt_password
@@ -24,6 +25,25 @@ class User < ApplicationRecord
     end
   end
 
+  private
 
+  def password_presence
+    if self.persisted?
+      if self.encrypted_password.blank? || self.password&.empty?
+        add_missing_password_error
+        return false
+      end
+    else # new record
+      if self.password.blank?
+        add_missing_password_error
+        return false
+      end
+    end
+    true
+  end
+
+  def add_missing_password_error
+    self.errors.add(:password, 'cannot be empty')
+  end
 
 end
