@@ -11,6 +11,7 @@ class User < ApplicationRecord
   validates :name, uniqueness: true, format: /[a-z0-9]+/
 
   after_create :encrypt_password
+  before_save  :update_password_if_needed
 
   def self.authenticate(name, password)
     user = User.find_by name: name
@@ -18,14 +19,14 @@ class User < ApplicationRecord
     nil
   end
 
+  private
+
   def encrypt_password
     if self.encrypted_password.blank? && self.salt.blank?
       salt, password = AuthenticationService.encrypt_password(self, self.password)
       self.update(encrypted_password: password, salt: salt)
     end
   end
-
-  private
 
   def password_presence
     if self.persisted?
@@ -44,6 +45,12 @@ class User < ApplicationRecord
 
   def add_missing_password_error
     self.errors.add(:password, 'cannot be empty')
+  end
+
+  def update_password_if_needed
+    if self.password.present?
+      self.salt, self.encrypted_password = AuthenticationService.encrypt_password(self, self.password)
+    end
   end
 
 end

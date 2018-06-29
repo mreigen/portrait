@@ -10,12 +10,14 @@ gem 'sqlite3', '1.3.13'
 gem 'uglifier', '4.1.6'
 gem 'webpacker', '3.2.2'
 gem 'will_paginate', '3.1.6'
+gem 'sendgrid-ruby', '1.1.6'
 
 group :development, :test do
   gem 'byebug', '10.0.0'
   gem 'haml_lint', '0.25.1'
   gem 'puma', '3.11.2'
   gem 'rspec-rails', '3.7.2'
+  gem 'dotenv-rails'
 end
 
 group :development do

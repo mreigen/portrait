@@ -37,3 +37,4 @@ db/*.sqlite3
 yarn-debug.log*
 yarn-error.log*
 .yarn-integrity
+.env
