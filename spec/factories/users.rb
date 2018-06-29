@@ -4,6 +4,8 @@ FactoryBot.define do
     password 'fortytheives'
     encrypted_password ''
     salt ''
+    email 'some_email@gmail.com'
+    reset_password_token 'abc'
 
     trait :admin do
       name 'admin'

@@ -48,4 +48,69 @@ describe UsersController do
     }.to change(User, :count).by(-1)
   end
 
+  describe 'Reset password' do
+    it 'handles /users/reset_password with GET' do
+      gt '/users/reset_password'
+      expect(response).to be_successful
+    end
+
+    it 'handles /users/change_password with GET' do
+      gt "/users/#{@user.name}/change_password"
+      expect(response).to be_successful
+    end
+
+    describe '#send_reset_password_email' do
+      context 'when there is an email' do
+        it 'sends request password email' do
+          expect(EmailService).to receive(:send_password_reset_email)
+          pst '/users/send_reset_password_email', {email: @user.email}
+          expect(response).to render_template 'users/reset_password_email_sent'
+        end
+
+        context 'when user is NOT found' do
+          it 'fails' do
+            expect(User).to receive(:find_by_email) { nil }
+            pst '/users/send_reset_password_email', {email: @user.email}
+            expect(response).to render_template 'users/user_not_found'
+          end
+        end
+      end
+
+      context 'when there is NOT an email' do
+        it 'fails' do
+          expect(EmailService).not_to receive(:send_password_reset_email)
+          pst '/users/send_reset_password_email'
+          expect(response).not_to be_successful
+        end
+      end
+    end
+
+    describe '#update_password' do
+      context 'when missing reset password params' do
+        it 'fails' do
+          ptch '/users/update_password', {some_key: 'some_value'}
+          expect(response).not_to be_successful
+        end
+      end
+
+      context 'when params are provided enough' do
+        context 'when a user with such token was not found' do
+          it 'returns not_found' do
+            ptch '/users/update_password', {reset_password_token: 'BAD TOKEN', password: 'new_password'}
+            expect(response).to render_template 'users/user_not_found'
+          end
+        end
+
+        context 'when a user is found' do
+          it 'updates the password' do
+            expect(User).to receive(:find_by).with(reset_password_token: 'abc') { @user }
+            ptch '/users/update_password', {reset_password_token: 'abc', password: 'new_password'}
+            expect(@user.encrypted_password).to eq AuthenticationService.encrypt_password(@user, 'new_password')[1]
+            expect(response).to redirect_to :root
+          end
+        end
+      end
+    end
+
+  end
 end

@@ -30,15 +30,18 @@ class UsersController < ApplicationController
       render json: {message: 'Not a valid request to update the password'}, status: :bad_request and return
     end
 
-    @user = User.find_by(reset_password_token: params[:reset_password_token])
-    @user.update_attributes! password: params[:password]
+    if @user = User.find_by(reset_password_token: params[:reset_password_token])
+      @user.update_attributes! password: params[:password]
 
-    flash[:notice] = "Successfully updated your password, please log in with your new password!"
-    redirect_to :root
+      flash[:notice] = "Successfully updated your password, please log in with your new password!"
+      redirect_to :root
+    else
+      render 'users/user_not_found', status: :not_found
+    end
 
   rescue ActiveRecord::RecordInvalid
-    flash[:notice] = 'Could not find a user with the provided reset token'
-    render 'users/user_not_found', status: :not_found
+    flash[:notice] = 'Could not update the password'
+    redirect_to :root
   end
 
   # GET /users
