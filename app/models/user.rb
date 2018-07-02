@@ -20,6 +20,10 @@ class User < ApplicationRecord
     nil
   end
 
+  def invalidate_reset_token
+    self.update_attributes! reset_password_token: nil
+  end
+
   private
 
   def encrypt_password

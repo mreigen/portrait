@@ -108,6 +108,13 @@ describe UsersController do
             expect(@user.encrypted_password).to eq AuthenticationService.encrypt_password(@user, 'new_password')[1]
             expect(response).to redirect_to :root
           end
+
+          it 'invalidates the reset token' do
+            expect(User).to receive(:find_by).with(reset_password_token: 'abc') { @user }
+            expect(@user).to receive(:invalidate_reset_token).and_call_original
+            ptch '/users/update_password', {reset_password_token: 'abc', password: 'new_password'}
+            expect(@user.reset_password_token).to eq nil
+          end
         end
       end
     end
