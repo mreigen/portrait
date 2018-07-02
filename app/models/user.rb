@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   validate  :password_presence
   validates :name, uniqueness: true, format: /[a-z0-9]+/
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   after_create :encrypt_password
   before_save  :update_password_if_needed

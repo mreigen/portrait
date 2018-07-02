@@ -66,7 +66,15 @@ class UsersController < ApplicationController
 
   # PUT /users/:id
   def update
-    @user.update_attributes! user_params
+    update_params = user_params.dup
+
+    # when password is blank but there is at least another field needs to be updated
+    # in other words, when password is blank, don't update it
+    if should_remove_password_param?(update_params)
+      update_params = update_params.except(:password)
+    end
+
+    @user.update_attributes! update_params
     redirect_to @user
   rescue ActiveRecord::RecordInvalid
     render :show
@@ -85,7 +93,11 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :password, :reset_password_token)
+    params.require(:user).permit(:name, :password, :reset_password_token, :email)
+  end
+
+  def should_remove_password_param? update_params
+    update_params.keys.include?('password') && update_params[:password].empty? && update_params.keys.size > 1
   end
 
 end

@@ -25,6 +25,7 @@ group :development do
   gem 'rubocop', '0.51.0'
   gem 'spring-watcher-listen', '2.0.1'
   gem 'web-console', '3.5.1'
+  gem 'pry-byebug'
 end
 
 group :test do
