@@ -5,5 +5,8 @@
     = javascript_pack_tag 'application'
     %title .portrait.
   %body
-    %h1 portrait
+    %a{href: '/'}
+      %h1 portrait
+    - flash.each do |name, msg|
+      = content_tag :div, msg, class: "alert alert-info"
     #Content= yield

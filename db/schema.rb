@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_02_17_000130) do
+ActiveRecord::Schema.define(version: 2018_06_28_063657) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -46,10 +46,14 @@ ActiveRecord::Schema.define(version: 2018_02_17_000130) do
 
   create_table "users", force: :cascade do |t|
     t.string "name"
-    t.string "password"
     t.integer "sites_count", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string "encrypted_password", default: "", null: false
+    t.string "salt", default: "", null: false
+    t.string "email"
+    t.string "reset_password_token"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token"
   end
 
 end

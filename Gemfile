@@ -10,12 +10,14 @@ gem 'sqlite3', '1.3.13'
 gem 'uglifier', '4.1.6'
 gem 'webpacker', '3.2.2'
 gem 'will_paginate', '3.1.6'
+gem 'sendgrid-ruby', '1.1.6'
 
 group :development, :test do
   gem 'byebug', '10.0.0'
   gem 'haml_lint', '0.25.1'
   gem 'puma', '3.11.2'
   gem 'rspec-rails', '3.7.2'
+  gem 'dotenv-rails'
 end
 
 group :development do
@@ -23,8 +25,11 @@ group :development do
   gem 'rubocop', '0.51.0'
   gem 'spring-watcher-listen', '2.0.1'
   gem 'web-console', '3.5.1'
+  gem 'pry-byebug'
 end
 
 group :test do
   gem 'rails-controller-testing', '1.0.2'
+  gem 'factory_bot_rails'
+  gem 'database_cleaner'
 end

@@ -1,8 +1,11 @@
 require 'rails_helper'
 
 describe Site do
+  let!(:admin) { create(:user, :admin) }
+  let!(:google) { create(:site, user: admin) }
+
   it 'should belong to a user' do
-    expect(sites(:google).user).to eq(users(:admin))
+    expect(google.user).to eq admin
   end
 
   it 'should require a url' do

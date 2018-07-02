@@ -1,4 +1,6 @@
 class SitesController < ApplicationController
+  include Authenticatable
+
   before_action :user_required
 
   def index
