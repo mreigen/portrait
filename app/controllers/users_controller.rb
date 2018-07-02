@@ -23,6 +23,9 @@ class UsersController < ApplicationController
   def change_password
     @reset_password_token = params[:token]
     @user = User.find_by(reset_password_token: @reset_password_token)
+    if @user.blank?
+      render json: {message: 'Token is invalid'}, status: :bad_request and return
+    end
   end
 
   def update_password
@@ -32,6 +35,8 @@ class UsersController < ApplicationController
 
     if @user = User.find_by(reset_password_token: params[:reset_password_token])
       @user.update_attributes! password: params[:password]
+
+      @user.invalidate_reset_token
 
       flash[:notice] = "Successfully updated your password, please log in with your new password!"
       redirect_to :root
