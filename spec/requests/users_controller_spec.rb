@@ -15,7 +15,7 @@ describe UsersController do
 
   it 'handles /users with valid params and POST' do
     expect {
-      pst :users, user: { name: 'name', password: 'password' }
+      pst :users, user: { name: 'name', password: 'password', email: 'my-email@gmail.com'}
       expect(response).to redirect_to(users_path)
     }.to change(User, :count).by(1)
   end
@@ -24,7 +24,7 @@ describe UsersController do
     # Once when creating the test Admin user (inside login_as)
     # Once when creating the user in the POST request
     expect(AuthenticationService).to receive(:encrypt_password).twice.and_call_original
-    pst :users, user: {name: 'name', password: 'password'}
+    pst :users, user: {name: 'name', password: 'password', email: 'my-email@gmail.com'}
     expect(response).to redirect_to(users_path)
   end
 
@@ -54,9 +54,22 @@ describe UsersController do
       expect(response).to be_successful
     end
 
-    it 'handles /users/change_password with GET' do
-      gt "/users/#{@user.name}/change_password"
-      expect(response).to be_successful
+    describe '#change_password' do
+
+      context 'found the user' do
+        it 'handles /users/change_password with GET' do
+          gt "/users/#{@user.name}/change_password", {token: 'abc'}
+          expect(response).to be_successful
+        end
+      end
+
+      context 'user not found' do
+        it 'handles /users/change_password with GET' do
+          gt "/users/#{@user.name}/change_password", {token: 'not-found'}
+          expect(response).not_to be_successful
+        end
+      end
+
     end
 
     describe '#send_reset_password_email' do
