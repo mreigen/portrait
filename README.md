@@ -1,9 +1,11 @@
-## Minh's notes
+
+##### Minh Reigen Code Challenge
 
 Features that I picked to work on:
  - User security
+ - Non-blocking
 
-### User security
+## User security
 #### Reason
 I picked to work on this problem because I think security issues are very important and interesting.
 #### Description
@@ -44,3 +46,37 @@ To run the test suite
 ```
 rspec
 ```
+
+## Non-blocking
+#### Reason
+Scaling problems are fun and worthy to be solved. I thought I could apply Sidekiq for background processing and Pusher for realtime status update for this solution.
+
+#### Description
+I chose Sidekiq for background processing instead of other background job libraries like ActiveJob because Sidekiq is using threads to handle multiple jobs concurrently instead of hitting our database like ActiveJob.
+
+After a user enters a site URL to be processed, the app will set the site's status to `started` and put the job in the background queue. The site's index page will display 'Processing image, please wait...' while the Javascript code will subscribe to a Pusher channel and event. After the job is processed in the queue, it will push the site's data hash to Pusher to be broadcast. Javascript code in the front-end will receive the broadcast data hash then displays the new status and processed image's URL.
+
+The reason I'm using Pusher instead of Rails' ActionCable for this project is because it's faster to develop for this code challenge, and it's free to use with a rate limit.
+
+#### Future optimization
+For 'remote' API requests to create a site, like the one below will not wait until the processing is done and receive a response with `succeeded` status any more.
+```
+curl -X POST -d "site[url]=https://google.com" -H "Accept: application/json" http://admin:admin@localhost:3000/sites
+```
+I would love to implement a callback request (webhook) to post back the process result to the client's `callback_url`
+
+#### Roadblocks
+No major roadblocks.
+
+#### Estimation accuracy
+Time estimation: 4 hours. Actual time needed: approximately 4 hours.
+
+#### Running instructions
+I am using Pusher notification for this solution, so please add these environment variables and (re)start the app.
+```
+PUSHER_API_KEY=24adc735f893cf5f5661
+PUSHER_APP_ID=554190
+PUSHER_SECRET=24d2cb71f9817f775110
+PUSHER_CLUSTER=us2
+```
+
