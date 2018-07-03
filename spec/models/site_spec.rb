@@ -23,6 +23,6 @@ describe Site do
   it 'should require a user' do
     site = Site.new
     site.valid?
-    expect(site.errors[:user_id]).not_to be_empty
+    expect(site.errors[:user]).not_to be_empty
   end
 end

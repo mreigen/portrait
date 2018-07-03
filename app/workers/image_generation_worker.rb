@@ -1,6 +1,6 @@
 class ImageGenerationWorker
   include Sidekiq::Worker
-  sidekiq_options queue: 'portrait_normal', retry: 5, backtrace: true, expires_in: 1.hour
+  sidekiq_options retry: 5, backtrace: true, expires_in: 1.hour
 
   attr_accessor :site
 

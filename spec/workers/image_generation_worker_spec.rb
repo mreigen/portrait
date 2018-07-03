@@ -1,6 +1,6 @@
 require 'rails_helper'
 RSpec.describe ImageGenerationWorker, type: :worker do
-  it { is_expected.to be_processed_in :portrait_normal }
+  it { is_expected.to be_processed_in :default }
   it { is_expected.to be_retryable 5 }
   it { is_expected.to save_backtrace }
   it { is_expected.to be_expired_in 1.hour }
