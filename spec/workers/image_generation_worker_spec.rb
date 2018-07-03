@@ -21,5 +21,23 @@ RSpec.describe ImageGenerationWorker, type: :worker do
       expect(Pusher).to receive(:trigger)
       subject.perform(site.id)
     end
+
+    context 'if site has a callback_url' do
+      it 'sends a webhook callback' do
+        expect(HTTParty).to receive(:post).with('http://callmeback.com/later', anything)
+        subject.perform(site.id)
+      end
+    end
+
+    context 'if site does NOT have a callback_url' do
+      before do
+        allow(site).to receive(:callback_url) { nil }
+      end
+      it 'will NOT send a webhook callback' do
+        expect(HTTParty).not_to receive(:post).with('http://callmeback.com/later', anything)
+        subject.perform(site.id)
+      end
+    end
+
   end
 end

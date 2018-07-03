@@ -12,7 +12,9 @@ class Site < ApplicationRecord
     ImageGenerationWorker.perform_async(self.id)
   end
 
+  URL_VALID_FORMAT = '\A((http|https):\/\/)*[a-z0-9_-]{1,}\.*[a-z0-9_-]{1,}\.[a-z]{2,5}(\/)?\S*\z'
   validates :user, presence: true
-  validates :url, format: /\A((http|https):\/\/)*[a-z0-9_-]{1,}\.*[a-z0-9_-]{1,}\.[a-z]{2,5}(\/)?\S*\z/i
+  validates :url, format: /#{URL_VALID_FORMAT}/i
+  validates :callback_url, format: /\A\z|#{URL_VALID_FORMAT}/i
 
 end

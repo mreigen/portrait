@@ -80,6 +80,8 @@ GEM
       rake (>= 10, < 13)
       rubocop (>= 0.47.0)
       sysexits (~> 1.1)
+    httparty (0.16.2)
+      multi_xml (>= 0.5.2)
     httpclient (2.8.3)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
@@ -104,6 +106,7 @@ GEM
     minitest (5.11.3)
     msgpack (1.2.2)
     multi_json (1.13.1)
+    multi_xml (0.6.0)
     multipart-post (2.0.0)
     nio4r (2.2.0)
     nokogiri (1.8.2)
@@ -264,6 +267,7 @@ DEPENDENCIES
   factory_bot_rails
   haml (= 5.0.4)
   haml_lint (= 0.25.1)
+  httparty
   jbuilder (= 2.7.0)
   listen (= 3.1.5)
   parser (= 2.3.3.1)
