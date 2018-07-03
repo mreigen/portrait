@@ -29,10 +29,11 @@ describe SitesController, 'js api' do
 
   it 'handles / with valid parameters and POST' do
     expect {
+      expect(ImageGenerationWorker).to receive(:perform_async)
       pst :sites, site: { url: 'https://google.com' }, format: :json
       expect(assigns(:site).user).to eq(@user)
       expect(response).to be_successful
-      expect(response.body).to be_include('"status":"succeeded"')
+      expect(response.body).to be_include('"status":"started"') # will be in queue
     }.to change(Site, :count).by(1)
   end
 
