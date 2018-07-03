@@ -12,6 +12,7 @@ gem 'webpacker', '3.2.2'
 gem 'will_paginate', '3.1.6'
 gem 'sendgrid-ruby', '1.1.6'
 gem 'sidekiq'
+gem 'pusher'
 
 group :development, :test do
   gem 'byebug', '10.0.0'

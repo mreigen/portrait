@@ -29,7 +29,14 @@ class ImageGenerationWorker
   def attach(path)
     @site.image.attach io: File.open(path), filename: "#{@site.id}.png", content_type: 'image/png'
     @site.succeeded!
+    notify_pusher(@site)
   ensure
     FileUtils.rm path
+  end
+
+  def notify_pusher(site)
+    Pusher.trigger('survey-monkey-test-channel', 'image-processing-finished', {
+      site: {id: site.id, status: site.status.capitalize, image_name: site.image.filename, image_url: site.image.service_url}
+    })
   end
 end

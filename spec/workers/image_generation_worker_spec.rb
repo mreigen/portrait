@@ -16,5 +16,10 @@ RSpec.describe ImageGenerationWorker, type: :worker do
       expect(site.status).to eq('started')
       subject.perform(site.id)
     end
+
+    it 'sends realtime notification with Pusher' do
+      expect(Pusher).to receive(:trigger)
+      subject.perform(site.id)
+    end
   end
 end
