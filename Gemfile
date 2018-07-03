@@ -10,7 +10,16 @@ gem 'sqlite3', '1.3.13'
 gem 'uglifier', '4.1.6'
 gem 'webpacker', '3.2.2'
 gem 'will_paginate', '3.1.6'
+
+# email sending
 gem 'sendgrid-ruby', '1.1.6'
+
+# for background jobs
+gem 'sidekiq'
+
+# to send realtime notifications and callbacks
+gem 'pusher'
+gem 'httparty'
 
 group :development, :test do
   gem 'byebug', '10.0.0'
@@ -32,4 +41,5 @@ group :test do
   gem 'rails-controller-testing', '1.0.2'
   gem 'factory_bot_rails'
   gem 'database_cleaner'
+  gem 'rspec-sidekiq'
 end

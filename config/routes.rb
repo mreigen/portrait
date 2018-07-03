@@ -14,4 +14,8 @@ Portrait::Application.routes.draw do
   end
 
   root to: 'home#index'
+
+  require 'sidekiq/web'
+  Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
+  mount Sidekiq::Web => '/sidekiq'
 end

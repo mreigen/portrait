@@ -9,7 +9,7 @@ class SitesController < ApplicationController
   end
 
   def create
-    @site = @current_user.sites.build params.fetch(:site, {}).permit(:url)
+    @site = @current_user.sites.build params.fetch(:site, {}).permit(:url, :callback_url)
     @site.save
     respond_to do |format|
       format.html { redirect_to sites_url }

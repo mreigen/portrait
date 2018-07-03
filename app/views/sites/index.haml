@@ -10,11 +10,21 @@
     %th Added
     %th Image
   - @sites.each do |site|
-    %tr
+    %tr{id: "#{site.id}"}
       %td= link_to site.user.name, users_path
       %td= link_to site.url, site.url
-      %td= site.status.capitalize
+      %td
+        .status
+          = site.status.capitalize
       %td= site.created_at.strftime '%B %e, %Y %I:%m %p'
-      %td= link_to(site.image.filename, url_for(site.image)) if site.image.attached?
+      %td
+        .image
+          = site.image.attached? ? link_to(site.image.filename, url_for(site.image)) : 'Processing. Please wait...'
 
 = will_paginate @sites
+
+:javascript
+
+  $(document).ready(function() {
+    setUpPusher("#{ENV['PUSHER_API_KEY']}")
+  });
