@@ -52,5 +52,4 @@ describe SitesController, 'js api' do
       expect(response.body).to be_include(':{"errors":{"url":["is invalid"]}}')
     }.not_to change(Site, :count)
   end
-
 end

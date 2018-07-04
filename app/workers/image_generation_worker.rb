@@ -5,7 +5,7 @@ class ImageGenerationWorker
   attr_accessor :site
 
   def perform(site_id, url)
-    @site = Site.find_by(id: site_id)
+    @site = Site.find_by_id(site_id)
     return false if @site.blank?
     if url.present?
       @captured_site = Site.find_by(url: url)
