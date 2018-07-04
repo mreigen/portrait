@@ -4,15 +4,11 @@ class ImageGenerationWorker
 
   attr_accessor :site
 
-  def perform(site_id, url)
+  def perform(site_id)
     @site = Site.find_by_id(site_id)
     return false if @site.blank?
-    if url.present?
-      @captured_site = Site.find_by(url: url)
-      @captured_site = nil if @captured_site&.image.blank? || !@captured_site&.image.attached?
-    end
 
-    image_generator = ImageGeneratorService.new(@site, @captured_site)
+    image_generator = ImageGeneratorService.new(@site)
     image_generator.process
   end
 end

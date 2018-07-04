@@ -1,14 +1,13 @@
 class ImageGeneratorService
-  attr_accessor :site, :captured_site, :local_image_path
+  attr_accessor :site, :captured_site
 
-  def initialize(site, captured_site=nil)
+  def initialize(site)
     @site = site
-    @captured_site = captured_site
   end
 
   def process
-    if @captured_site.present? && @captured_site.image.attached?
-      handle @captured_site.image.service_url
+    if captured_site.present? && captured_site.image.attached?
+      handle captured_site.image.service_url
     else
       handle generate_png
     end
@@ -21,14 +20,8 @@ class ImageGeneratorService
     if File.exist?(path)
       attach(path)
     else
-      local_tmp_path = "#{Rails.root}/tmp/captured_site_#{@site.id}.png"
-
-      File.open(local_tmp_path, 'wb') do |file|
-        file.write(@captured_site.image.download)
-      end
-
-      if File.exist?(local_tmp_path)
-        attach(local_tmp_path)
+      if File.exist?(local_tmp_image_file)
+        attach(local_tmp_image_file)
       else
         @site.failed!
         notify
@@ -58,6 +51,23 @@ class ImageGeneratorService
     notifier = NotifierService.new(@site)
     notifier.notify_pusher
     notifier.send_webhook
+  end
+
+  # find the already captured site that has the same url of @site
+  def captured_site
+    @captured_site ||= Site.where(url: @site.url).where.not(id: @site.id).last
+    @captured_site = nil if @captured_site&.image.blank? || !@captured_site&.image.attached?
+    @captured_site
+  end
+
+  def local_tmp_image_file
+    return @local_tmp_image_file if @local_tmp_image_file.present?
+
+    @local_tmp_image_file = "#{Rails.root}/tmp/captured_site_#{@site.id}.png"
+    File.open(@local_tmp_image_file, 'wb') do |file|
+      file.write(@captured_site.image.download)
+    end
+    @local_tmp_image_file
   end
 
 end

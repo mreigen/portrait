@@ -9,7 +9,7 @@ class Site < ApplicationRecord
   after_create :process!
   def process!
     started!
-    ImageGenerationWorker.perform_async(self.id, self.url)
+    ImageGenerationWorker.perform_async(self.id)
   end
 
   URL_VALID_FORMAT = '\A((http|https):\/\/)*[a-z0-9_-]{1,}\.*[a-z0-9_-]{1,}\.[a-z]{2,5}(\/)?\S*\z'
