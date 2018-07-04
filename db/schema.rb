@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_03_174010) do
+ActiveRecord::Schema.define(version: 2018_07_03_221311) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 2018_07_03_174010) do
     t.string "callback_url"
     t.index ["created_at"], name: "index_sites_on_created_at"
     t.index ["status"], name: "index_sites_on_status"
+    t.index ["url"], name: "index_sites_on_url"
     t.index ["user_id"], name: "index_sites_on_user_id"
   end
 

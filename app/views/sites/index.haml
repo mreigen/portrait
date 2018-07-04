@@ -1,6 +1,11 @@
+:javascript
+  setUpPusher("#{ENV['PUSHER_API_KEY']}")
+
 = form_with model: @site do |f|
   = f.text_field :url
   = f.submit 'Capture URL'
+
+= button_to 'Delete All', delete_all_sites_path, onclick: "return confirm('Are you sure? This can not be undone!')", method: :delete
 
 %table
   %tr
@@ -22,9 +27,3 @@
           = site.image.attached? ? link_to(site.image.filename, url_for(site.image)) : 'Processing. Please wait...'
 
 = will_paginate @sites
-
-:javascript
-
-  $(document).ready(function() {
-    setUpPusher("#{ENV['PUSHER_API_KEY']}")
-  });

@@ -1,6 +1,10 @@
 FactoryBot.define do
+  sequence :name do |n|
+    "user_#{n}"
+  end
+
   factory :user do
-    name 'alibaba'
+    name
     password 'fortytheives'
     encrypted_password ''
     salt ''
