@@ -41,6 +41,7 @@ Since I removed the `password` column inside the `users` table and added a few c
 ```
 rake db:drop
 rake db:create
+rake db:migrate
 rake db:seed
 ```
 To start the app
