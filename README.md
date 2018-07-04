@@ -64,10 +64,10 @@ After a user enters a site URL to be processed, the app will set the site's stat
 
 The reason I'm using Pusher instead of Rails' ActionCable for this project is because it's faster to develop for this code challenge, and it's free to use with a rate limit.
 
-Image processing is in progress.
+A screenshot of image processing is in progress:
 ![enter image description here](https://s3-us-west-1.amazonaws.com/survey-monkey-test/processing-please-wait.png)
 
-Processing is finished.
+A screenshot of image processing is finished:
 ![enter image description here](https://s3-us-west-1.amazonaws.com/survey-monkey-test/process-done.png)
 
 #### Monitoring
