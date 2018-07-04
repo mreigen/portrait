@@ -17,6 +17,15 @@ class SitesController < ApplicationController
     end
   end
 
+  def delete_all
+    @current_user.sites.destroy_all
+    flash[:error] = 'All sites have been deleted'
+    redirect_to sites_path
+  rescue => e
+    flash[:error] = 'Could not delete all sites'
+    redirect_to sites_path
+  end
+
   private
 
   def site_params

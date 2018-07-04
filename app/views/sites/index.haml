@@ -5,6 +5,8 @@
   = f.text_field :url
   = f.submit 'Capture URL'
 
+= button_to 'Delete All', delete_all_sites_path, onclick: "return confirm('Are you sure? This can not be undone!')", method: :delete
+
 %table
   %tr
     %th User

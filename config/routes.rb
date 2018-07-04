@@ -1,5 +1,9 @@
 Portrait::Application.routes.draw do
-  resources :sites
+  resources :sites do
+    collection do
+      delete 'delete_all'
+    end
+  end
 
   resources :users do
     member do
