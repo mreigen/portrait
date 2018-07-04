@@ -4,6 +4,7 @@
 Features that I picked to work on:
  - User security
  - Non-blocking
+ - Efficiencies of Scale
 
 ## User security
 #### Reason
@@ -58,6 +59,12 @@ After a user enters a site URL to be processed, the app will set the site's stat
 
 The reason I'm using Pusher instead of Rails' ActionCable for this project is because it's faster to develop for this code challenge, and it's free to use with a rate limit.
 
+Image processing is in progress.
+![enter image description here](https://s3-us-west-1.amazonaws.com/survey-monkey-test/processing-please-wait.png)
+
+Processing is finished.
+![enter image description here](https://s3-us-west-1.amazonaws.com/survey-monkey-test/process-done.png)
+
 #### Monitoring
 Queues and jobs can be monitored via Sidekiq UI here:
 http://localhost:3000/sidekiq/queues
@@ -93,3 +100,20 @@ PUSHER_SECRET=24d2cb71f9817f775110
 PUSHER_CLUSTER=us2
 ```
 
+## Efficiencies of Scale
+#### Reason
+I picked this feature because it is related to non-blocking and interesting. I was asked a similar question in the interview so I wanted to implement this.
+
+#### Description
+My solution is to have the app look for an already captured site that has the same `url` provided. Since we are searching for already captured sites by their `url` so I indexed the column `url` in the `Sites` table so that it can be quickly looked up.
+
+#### Future optimization
+There is a timing issue with the front-end. Since looking up the already captured sites by the indexed `url` column is very fast, sometimes the JavaScript Pusher code is not ready yet to receive broadcast notifications. This would cause the fast processes to display `Processing image. Please wait...` and won't change to the image's URL until after we refresh the page. I would love to find a solution for this.
+
+#### Roadblocks
+No major roadblocks.
+
+#### Estimation accuracy
+Time estimation: 3 hours. Actual time needed: approximately 3 hours!
+#### Running instructions
+I have added a "Delete All" (all sites) button to make testing this easier. You can clear out all the sites for this logged in user first before capturing sites. After you capture a site, wait for the image to be processed. The view will be updated automatically with real-time callback (done in non-blocking.) After the first image is done processing, please capture the same site again. You will notice that this time, the process is much faster. This is because the back-end doesn't have to capture the site again, but it found an already captured site and re-use its image.
