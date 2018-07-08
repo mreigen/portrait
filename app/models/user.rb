@@ -11,7 +11,6 @@ class User < ApplicationRecord
   validates :name, uniqueness: true, format: /[a-z0-9]+/
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
-  after_create :encrypt_password
   before_save  :update_password_if_needed
 
   def self.authenticate(name, password)
@@ -25,14 +24,6 @@ class User < ApplicationRecord
   end
 
   private
-
-  def encrypt_password
-    if self.encrypted_password.blank? && self.salt.blank?
-      salt, password = AuthenticationService.encrypt_password(self, self.password)
-      self.update(encrypted_password: password, salt: salt)
-    end
-  end
-
   def password_presence
     if self.persisted?
       if self.encrypted_password.blank? || self.password&.empty?
